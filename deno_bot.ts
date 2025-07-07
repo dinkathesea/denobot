@@ -7,13 +7,14 @@ const ADMIN_CHAT_ID = 318752994;
 const CHANNEL_LINK = "https://t.me/+SEUjra4YvL41Mjgy";
 const WAYFORPAY_URL = "https://secure.wayforpay.com/sub/dinkafood";
 
-const bot = new Bot(BOT_TOKEN)!;
-
-const userLanguage = new Map<number, string>();
-const waitingForEmail = new Set<number>();
+var bot = new Bot(BOT_TOKEN)!;
 bot.init();
+
+
+var userLanguage = new Map<number, string>();
+var waitingForEmail = new Set<number>();
 bot.command("start", async (ctx) => {
-  const keyboard = new InlineKeyboard()
+  var keyboard = new InlineKeyboard()
     .text("Українська 🇺🇦", "lang_ua")
     .text("English 🇬🇧", "lang_en");
 
@@ -23,12 +24,12 @@ bot.command("start", async (ctx) => {
 });
 
 bot.callbackQuery(/^lang_/, async (ctx) => {
-  const chatId = ctx.chat.id;
-  const lang = ctx.match[0].split("_")[1];
+  var chatId = ctx.chat.id;
+  var lang = ctx.match[0].split("_")[1];
   userLanguage.set(chatId, lang);
 
-  const keyboard = new InlineKeyboard().url("📄 ", WAYFORPAY_URL);
-  const confirm = new InlineKeyboard().text("✅ I’ve paid / Я оплатив(ла)", "confirm_payment");
+  var keyboard = new InlineKeyboard().url("📄 ", WAYFORPAY_URL);
+  var confirm = new InlineKeyboard().text("✅ I’ve paid / Я оплатив(ла)", "confirm_payment");
 
   if (lang === "ua") {
     await ctx.reply("Смаколику, вітаю! 🍓\nТи на порозі вступу до закритого каналу...\n\nДоступ коштує 300 грн/міс.\nЩомісяця 20% з підписок я надсилаю на перевірені збори і ділюсь звітами у каналі.", {
@@ -49,7 +50,7 @@ bot.callbackQuery(/^lang_/, async (ctx) => {
 });
 
 bot.callbackQuery("confirm_payment", async (ctx) => {
-  const lang = userLanguage.get(ctx.chat.id) || "ua";
+  var lang = userLanguage.get(ctx.chat.id) || "ua";
   waitingForEmail.add(ctx.chat.id);
   if (lang === "ua") {
     await ctx.reply("Вкажи, будь ласка, email, з якого ти здійснював(ла) оплату:");
@@ -60,21 +61,21 @@ bot.callbackQuery("confirm_payment", async (ctx) => {
 });
 
 bot.on("message:text", async (ctx) => {
-  const chatId = ctx.chat.id;
+  var chatId = ctx.chat.id;
   if (!waitingForEmail.has(chatId)) return;
   waitingForEmail.delete(chatId);
 
-  const lang = userLanguage.get(chatId) || "ua";
-  const email = ctx.message.text;
-  const username = ctx.from?.username || "No username";
+  var lang = userLanguage.get(chatId) || "ua";
+  var email = ctx.message.text;
+  var username = ctx.from?.username || "No username";
 
-  const adminText = lang === "ua"
+  var adminText = lang === "ua"
     ? `🔔 Дякую, тебе зареєстровано!\n\nEmail: ${email}\nUsername: @${username}`
     : `🔔 Thank you, you’re registered!\n\nEmail: ${email}\nUsername: @${username}`;
 
   await bot.api.sendMessage(ADMIN_CHAT_ID, adminText);
 
-  const userText = lang === "ua"
+  var userText = lang === "ua"
     ? `Вітаю в закритому клубі! 🎉\nОсь лінк на канал, bon appetit 🫦: ${CHANNEL_LINK}`
     : `Welcome to the private club! 🎉\nHere is the channel link, bon appetit 🫦: ${CHANNEL_LINK}`;
 
@@ -83,7 +84,7 @@ bot.on("message:text", async (ctx) => {
 });
 
 bot.command("language", async (ctx) => {
-  const keyboard = new InlineKeyboard()
+  var keyboard = new InlineKeyboard()
     .text("Українська 🇺🇦", "lang_ua")
     .text("English 🇬🇧", "lang_en");
   await ctx.reply("Choose your language / Обери мову:", {
@@ -92,9 +93,9 @@ bot.command("language", async (ctx) => {
 });
 
 bot.command("plans", async (ctx) => {
-  const lang = userLanguage.get(ctx.chat.id) || "ua";
-  const keyboard = new InlineKeyboard().url("📄", WAYFORPAY_URL);
-  const text = lang === "ua"
+  var lang = userLanguage.get(ctx.chat.id) || "ua";
+  var keyboard = new InlineKeyboard().url("📄", WAYFORPAY_URL);
+  var text = lang === "ua"
     ? "Доступ коштує 300 грн/міс.\nЩомісяця 20% з підписок я надсилаю на перевірені збори."
     : "Subscription is 300 UAH/month.\nEvery month, 20% is donated to verified causes.";
   await ctx.reply(text, {
@@ -103,8 +104,8 @@ bot.command("plans", async (ctx) => {
 });
 
 bot.command("cancel", async (ctx) => {
-  const lang = userLanguage.get(ctx.chat.id) || "ua";
-  const text = lang === "ua"
+  var lang = userLanguage.get(ctx.chat.id) || "ua";
+  var text = lang === "ua"
     ? "Щоб скасувати підписку, відкрий пошту, знайди лист від WayforPay та натисни кнопку *«Скасувати підписку»* або напиши мені 💌"
     : "To cancel your subscription, find the WayforPay confirmation email and click *'Cancel subscription'* or contact me 💌";
   await ctx.reply(text, { parse_mode: "Markdown" });
@@ -119,7 +120,7 @@ import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 
 serve(async (req) => {
   try {
-    const update = await req.json();
+    var update = await req.json();
     await bot.handleUpdate(update);
     return new Response("OK");
   } catch (err) {
