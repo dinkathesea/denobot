@@ -115,4 +115,16 @@ bot.command("ping", async (ctx) => {
   console.log("💬 Ping received and replied");
 });
 
-bot.start();
+import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
+
+serve(async (req) => {
+  try {
+    const update = await req.json();
+    await bot.handleUpdate(update);
+    return new Response("OK");
+  } catch (err) {
+    console.error("Error handling update:", err);
+    return new Response("Error", { status: 500 });
+  }
+});
+
