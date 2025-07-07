@@ -7,7 +7,7 @@ const ADMIN_CHAT_ID = 318752994;
 const CHANNEL_LINK = "https://t.me/+SEUjra4YvL41Mjgy";
 const WAYFORPAY_URL = "https://secure.wayforpay.com/sub/dinkafood";
 
-const bot = new Bot(BOT_TOKEN!);
+const bot = new Bot(BOT_TOKEN)!;
 
 const userLanguage = new Map<number, string>();
 const waitingForEmail = new Set<number>();
