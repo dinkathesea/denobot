@@ -11,7 +11,7 @@ const bot = new Bot(BOT_TOKEN)!;
 
 const userLanguage = new Map<number, string>();
 const waitingForEmail = new Set<number>();
-
+bot.init();
 bot.command("start", async (ctx) => {
   const keyboard = new InlineKeyboard()
     .text("Українська 🇺🇦", "lang_ua")
