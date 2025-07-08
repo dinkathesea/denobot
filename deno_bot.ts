@@ -1,6 +1,5 @@
 // deno_bot.ts
-import { Bot, InlineKeyboard } from "https://deno.land/x/grammy/mod.ts";
-import "https://deno.land/std@0.224.0/dotenv/load.ts";
+import { Bot, InlineKeyboard } from "jsr:@grammyjs/bot";
 
 const BOT_TOKEN = Deno.env.get("BOT_TOKEN");
 const ADMIN_CHAT_ID = 318752994;
