@@ -1,5 +1,5 @@
 // deno_bot.ts
-import { Bot, InlineKeyboard } from "jsr:@grammyjs/bot";
+import { Bot, InlineKeyboard } from "https://esm.sh/grammy";
 
 const BOT_TOKEN = Deno.env.get("BOT_TOKEN");
 const ADMIN_CHAT_ID = 318752994;
@@ -117,13 +117,18 @@ bot.command("ping", async (ctx) => {
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 
 serve(async (req) => {
+  if (req.method === "GET") {
+    return new Response("Bot is running!", { status: 200 });
+  }
+
   try {
     const update = await req.json();
     await bot.handleUpdate(update);
     return new Response("OK");
   } catch (err) {
-    console.error("Error handling update:", err);
+    console.error("Error while handling update", err);
     return new Response("Error", { status: 500 });
   }
 });
+
 
